@@ -5,7 +5,9 @@ import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule } from '@nestjs/config';
+import { GlobalFiltersModule } from './global-filters/global-filters.module';
 import OrmConfig from '../ormconfig.js';
+import { ResponseModule } from './response/response.module';
 
 @Module({
     imports: [
@@ -15,6 +17,8 @@ import OrmConfig from '../ormconfig.js';
             isGlobal: true,
         }),
         TypeOrmModule.forRoot(OrmConfig),
+        ResponseModule,
+        GlobalFiltersModule,
     ],
     controllers: [AppController],
     providers: [AppService],
