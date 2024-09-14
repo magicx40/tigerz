@@ -6,8 +6,9 @@ import { AuthModule } from './auth/auth.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule } from '@nestjs/config';
 import { GlobalFiltersModule } from './global-filters/global-filters.module';
-import OrmConfig from '../ormconfig.js';
-import { ResponseModule } from './response/response.module';
+import OrmConfig from '../typeorm.config.js';
+import { APP_INTERCEPTOR } from '@nestjs/core';
+import { ResponseInterceptor } from './response/response.interceptor';
 
 @Module({
     imports: [
@@ -17,10 +18,15 @@ import { ResponseModule } from './response/response.module';
             isGlobal: true,
         }),
         TypeOrmModule.forRoot(OrmConfig),
-        ResponseModule,
         GlobalFiltersModule,
     ],
     controllers: [AppController],
-    providers: [AppService],
+    providers: [
+        AppService,
+        {
+            provide: APP_INTERCEPTOR,
+            useClass: ResponseInterceptor,
+        },
+    ],
 })
 export class AppModule {}
